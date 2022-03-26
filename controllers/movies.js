@@ -3,25 +3,29 @@ const Movie = require('../models/movie');
 const {
   SUCCESS_CODE_OK,
   SUCCESS_CODE_CREATED,
-  ERROR_CODE_UNDEFINED,
 } = require('../utils/constants');
 
-const getMovies = (req, res) => {
+const {
+  BadRequestError,
+  ForbiddenError,
+  NotFoundError,
+} = require('../errors/errors');
+
+const getMovies = (req, res, next) => {
   Movie.find({})
     .populate('owner')
     .then((data) => {
-      // eslint-disable-next-line max-len
       const usersMovie = data.filter((movie) => String(movie.owner._id) === String(req.user._id));
       if (usersMovie.length > 0) {
-        res.status(SUCCESS_CODE_OK).send({ movies: usersMovie });
+        res.status(SUCCESS_CODE_OK).send({ usersMovie });
       } else {
-        res.status(ERROR_CODE_UNDEFINED).send({ message: 'Не найдены сохраненные фильмы' });
+        throw new NotFoundError('Не найдены сохраненные фильмы');
       }
     })
-    .catch((err) => console.log(err));
+    .catch(next);
 };
 
-const createMovie = (req, res) => {
+const createMovie = (req, res, next) => {
   const {
     // eslint-disable-next-line max-len
     country, director, duration, year, description, image, trailerLink, nameRU, nameEN, thumbnail, movieId,
@@ -29,7 +33,7 @@ const createMovie = (req, res) => {
 
   // eslint-disable-next-line max-len
   if (!country || !director || !duration || !year || !description || !image || !trailerLink || !nameRU || !nameEN || !thumbnail || !movieId) {
-    return res.status(ERROR_CODE_UNDEFINED).send({ message: 'Введены не все обязательные поля' });
+    throw new NotFoundError('Не все обязательные поля указаны');
   }
 
   return Movie.create({
@@ -37,32 +41,42 @@ const createMovie = (req, res) => {
     country, director, duration, year, description, image, trailerLink, nameRU, nameEN, thumbnail, movieId, owner: req.user._id,
   })
     .then((movie) => {
-      res.status(SUCCESS_CODE_CREATED).send({ data: movie });
+      Movie.findById(movie._id)
+        .populate('owner')
+        .then((newMovie) => {
+          res.status(SUCCESS_CODE_CREATED).send({ newMovie });
+        })
+        .catch(next);
     })
-    .catch((err) => res.status(ERROR_CODE_UNDEFINED).send({ message: err.message }));
+    .catch((err) => {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        next(new BadRequestError(`Переданы некорректные данные: ${err}`));
+      } else {
+        next(err);
+      }
+    });
 };
 
 const deleteMovieById = (req, res, next) => {
   const { movieId } = req.params;
+
   Movie.findById(movieId)
     .then((movie) => {
       if (!movie) {
-        res.status(ERROR_CODE_UNDEFINED).send({ message: 'Фильм с таким id не найден' });
+        throw new NotFoundError('Фильм с таким id не найден');
       } else if (String(movie.owner) === String(req.user._id)) {
         Movie.findByIdAndRemove(movieId)
           .then((deletedMovie) => {
-            res.status(SUCCESS_CODE_OK).send({ data: deletedMovie });
+            res.status(SUCCESS_CODE_OK).send({ deletedMovie });
           })
           .catch((err) => {
             next(err);
           });
       } else {
-        res.status(ERROR_CODE_UNDEFINED).send({ message: 'Нельзя удалять карточки другого пользователя' });
+        throw new ForbiddenError('Нельзя удалять сохраненные фильмы другого пользователя');
       }
     })
-    .catch((err) => {
-      console.log(err);
-    });
+    .catch(next);
 };
 
 module.exports = {

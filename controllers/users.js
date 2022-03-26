@@ -2,45 +2,51 @@ const User = require('../models/user');
 
 const {
   SUCCESS_CODE_OK,
-  ERROR_CODE_UNDEFINED,
 } = require('../utils/constants');
+
+const {
+  BadRequestError,
+  NotFoundError,
+} = require('../errors/errors');
 
 const optionsOfData = {
   new: true,
   runValidators: true,
 };
 
-const getUserMe = (req, res) => {
+const getUserMe = (req, res, next) => {
   User.findById({ _id: req.user._id })
     .then((user) => {
       if (user) {
-        res.status(SUCCESS_CODE_OK).send({ data: user });
+        res.status(SUCCESS_CODE_OK).send({ user });
       } else {
-        res.status(ERROR_CODE_UNDEFINED).send({ message: 'Пользователь с таким id не найден' });
+        throw new NotFoundError('Пользователь с таким id не найден');
       }
     })
-    .catch((err) => {
-      console.log(err);
-    });
+    .catch(next);
 };
 
-const uptadeUserProfile = (req, res) => {
+const uptadeUserProfile = (req, res, next) => {
   const { name, email } = req.body;
 
   if (!req.body.name || !req.body.email) {
-    return res.status(ERROR_CODE_UNDEFINED).send({ message: 'Переданы некорректные данные' });
+    throw new BadRequestError('Переданы некорректные данные');
   }
 
   return User.findByIdAndUpdate(req.user._id, { name, email }, optionsOfData)
     .then((user) => {
       if (user) {
-        res.status(SUCCESS_CODE_OK).send({ data: user });
+        res.status(SUCCESS_CODE_OK).send({ user });
       } else {
-        res.status(ERROR_CODE_UNDEFINED).send({ message: 'Пользователь с таким id не найден' });
+        throw new NotFoundError('Пользователь с таким id не найден');
       }
     })
-    .catch(() => {
-      res.status(ERROR_CODE_UNDEFINED).send({ message: 'Переданы некорректные данные' });
+    .catch((err) => {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        next(new BadRequestError('Переданы некорректные данные'));
+      } else {
+        next(err);
+      }
     });
 };
 
