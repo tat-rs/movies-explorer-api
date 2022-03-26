@@ -8,6 +8,7 @@ const userRouter = require('./routes/users');
 const MovieRouter = require('./routes/movies');
 const { errorsHandler } = require('./middlewares/errorsHandler');
 const NotFoundError = require('./errors/NotFoundError');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
 
@@ -19,6 +20,8 @@ app.use(express.json());
 
 mongoose.connect('mongodb://localhost:27017/bitfilmsdb');
 
+app.use(requestLogger);
+
 app.use(userRouter);
 
 app.use(MovieRouter);
@@ -26,6 +29,8 @@ app.use(MovieRouter);
 app.use((req, res, next) => {
   next(new NotFoundError('Страница по указанному маршруту не найдена'));
 });
+
+app.use(errorLogger);
 
 app.use(errors());
 
