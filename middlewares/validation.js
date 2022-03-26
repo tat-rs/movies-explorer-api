@@ -1,55 +1,49 @@
 const { celebrate, Joi } = require('celebrate');
 const validator = require('validator');
+const BadRequestError = require('../errors/BadRequestError');
+
+const validateURL = (value) => {
+  if (!validator.isURL(value, { require_protocol: true })) {
+    throw new BadRequestError('Введенное значение не является ссылкой');
+  }
+  return value;
+};
+
+const validateEmail = (value) => {
+  if (!validator.isEmail(value)) {
+    throw new BadRequestError('Введен некорректный email');
+  }
+  return value;
+};
+
+const validateUserName = (value) => {
+  if (value.length < 2 || value.length > 30) {
+    throw new BadRequestError('Имя пользователя должно содержать от 2 до 30 символов');
+  }
+  return value;
+};
 
 const validateRegister = celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email()
-      .custom((value, helpers) => {
-        if (validator.isEmail(value)) {
-          return value;
-        }
-        return helpers.message({ message: 'Введен некорректный email' });
-      }),
+    email: Joi.string().required().email().custom(validateEmail),
     password: Joi.string().required(),
     name: Joi.string().required().min(2).max(30)
-      .custom((value, helpers) => {
-        if (value.length >= 2 && value.length <= 30) {
-          return value;
-        }
-        return helpers.message('Имя пользователя должно содержать от 2 до 30 символов');
-      }),
+      .custom(validateUserName),
   }),
 });
 
 const validateLogin = celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email()
-      .custom((value, helpers) => {
-        if (validator.isEmail(value)) {
-          return value;
-        }
-        return helpers.message('Введен некорректный email');
-      }),
+    email: Joi.string().required().email().custom(validateEmail),
     password: Joi.string().required(),
   }),
 });
 
 const validateUptadeProfile = celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email()
-      .custom((value, helpers) => {
-        if (validator.isEmail(value)) {
-          return value;
-        }
-        return helpers.message('Введен некорректный email');
-      }),
+    email: Joi.string().required().email().custom(validateEmail),
     name: Joi.string().required().min(2).max(30)
-      .custom((value, helpers) => {
-        if (value.length >= 2 && value.length <= 30) {
-          return value;
-        }
-        return helpers.message('Имя пользователя должно содержать от 2 до 30 символов');
-      }),
+      .custom(validateUserName),
   }),
 });
 
@@ -60,27 +54,9 @@ const validateCreateMovie = celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.string().required()
-      .custom((value, helpers) => {
-        if (validator.isURL(value, { require_protocol: true })) {
-          return value;
-        }
-        return helpers.message('Введенное значение не является ссылкой');
-      }),
-    trailerLink: Joi.string().required()
-      .custom((value, helpers) => {
-        if (validator.isURL(value, { require_protocol: true })) {
-          return value;
-        }
-        return helpers.message('Введенное значение не является ссылкой');
-      }),
-    thumbnail: Joi.string().required()
-      .custom((value, helpers) => {
-        if (validator.isURL(value, { require_protocol: true })) {
-          return value;
-        }
-        return helpers.message('Введенное значение не является ссылкой');
-      }),
+    image: Joi.string().required().custom(validateURL),
+    trailerLink: Joi.string().required().custom(validateURL),
+    thumbnail: Joi.string().required().custom(validateURL),
     movieId: Joi.number().required(),
     nameRU: Joi.string().required()
       .custom((value, helpers) => {
