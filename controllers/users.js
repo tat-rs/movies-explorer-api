@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 
@@ -13,7 +14,10 @@ const {
   BadRequestError,
   NotFoundError,
   ConflictError,
+  UnauthorizatedError,
 } = require('../errors/errors');
+
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 const optionsOfData = {
   new: true,
@@ -26,7 +30,7 @@ const createUser = (req, res, next) => {
   if (!email || !password || !name) {
     throw new BadRequestError('Заполните все обязательные поля');
   }
-
+  // хэшируем пароль
   bcrypt.hash(password, SOLT_ROUND)
     .then((hash) => User.create({ email, password: hash, name }))
     .then(() => res.status(SUCCESS_CODE_CREATED).send({ email, name }))
@@ -39,6 +43,35 @@ const createUser = (req, res, next) => {
         next(err);
       }
     });
+};
+
+const login = (req, res, next) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    throw new BadRequestError('Не передан email или пароль');
+  }
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'some-super-secret-key',
+        { expiresIn: '7d' },
+      );
+      res.cookie('jwt', token, {
+        maxAge: 3600000 * 24 * 7,
+        httpOnly: true,
+      });
+      res.send({ token });
+    })
+    .catch((err) => {
+      next(new UnauthorizatedError(err.message));
+    });
+};
+
+const signout = (req, res) => {
+  res.status(SUCCESS_CODE_OK).clearCookie('jwt').send({ message: 'Пользователь вышел из системы' });
 };
 
 const getUserMe = (req, res, next) => {
@@ -79,6 +112,8 @@ const uptadeUserProfile = (req, res, next) => {
 
 module.exports = {
   createUser,
+  login,
+  signout,
   getUserMe,
   uptadeUserProfile,
 };
