@@ -61,16 +61,16 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator: (v) => validator.isAlphaLocales(v, ['ru-RU']),
-      message: 'Введенное значение не является ссылкой',
+      validator: (v) => validator.isAlpha(v, ['ru-RU']),
+      message: 'Введите название фильма на русском языке',
     },
   },
   nameEN: {
     type: String,
     required: true,
     validate: {
-      validator: (v) => validator.isAlphaLocales(v, ['en-US']),
-      message: 'Введенное значение не является ссылкой',
+      validator: (v) => validator.isAlpha(v, ['en-US']),
+      message: 'Введите название фильма на английском языке',
     },
   },
 });
