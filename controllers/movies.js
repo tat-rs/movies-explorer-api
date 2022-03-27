@@ -50,7 +50,7 @@ const createMovie = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        next(new BadRequestError(`Переданы некорректные данные: ${err}`));
+        next(new BadRequestError('Переданы некорректные данные'));
       } else {
         next(err);
       }
