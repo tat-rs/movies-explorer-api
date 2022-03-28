@@ -1,8 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-require('dotenv').config();
 const { errors } = require('celebrate');
+
+require('dotenv').config();
 
 const userRouter = require('./routes/users');
 const MovieRouter = require('./routes/movies');
