@@ -8,6 +8,10 @@ const {
   SUCCESS_CODE_CREATED,
   ERROR_CODE_DUPLICATE,
   SOLT_ROUND,
+  BAD_REQUEST_ERR_MESSAGE,
+  CONFLICT_ERR_MESSAGE,
+  WRONG_ID_USER_ERR_MESSAGE,
+  SIGNOUT_SUCCESS_MESSAGE,
 } = require('../utils/constants');
 
 const {
@@ -33,9 +37,9 @@ const createUser = (req, res, next) => {
     .then(() => res.status(SUCCESS_CODE_CREATED).send({ email, name }))
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        next(new BadRequestError(`Переданы некорректные данные${err.errors.email ? `: ${err.errors.email.message}` : ''}`));
+        next(new BadRequestError(BAD_REQUEST_ERR_MESSAGE));
       } else if (err.code === ERROR_CODE_DUPLICATE) {
-        next(new ConflictError('Пользователь уже зарегистрирован'));
+        next(new ConflictError(CONFLICT_ERR_MESSAGE));
       } else {
         next(err);
       }
@@ -64,7 +68,7 @@ const login = (req, res, next) => {
 };
 
 const signout = (req, res) => {
-  res.status(SUCCESS_CODE_OK).clearCookie('jwt').send({ message: 'Пользователь вышел из системы' });
+  res.status(SUCCESS_CODE_OK).clearCookie('jwt').send({ message: SIGNOUT_SUCCESS_MESSAGE });
 };
 
 const getUserMe = (req, res, next) => {
@@ -73,7 +77,7 @@ const getUserMe = (req, res, next) => {
       if (user) {
         res.status(SUCCESS_CODE_OK).send({ user });
       } else {
-        throw new NotFoundError('Пользователь с таким id не найден');
+        throw new NotFoundError(WRONG_ID_USER_ERR_MESSAGE);
       }
     })
     .catch(next);
@@ -87,14 +91,14 @@ const uptadeUserProfile = (req, res, next) => {
       if (user) {
         res.status(SUCCESS_CODE_OK).send({ user });
       } else {
-        throw new NotFoundError('Пользователь с таким id не найден');
+        throw new NotFoundError(WRONG_ID_USER_ERR_MESSAGE);
       }
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        next(new BadRequestError('Переданы некорректные данные'));
+        next(new BadRequestError(BAD_REQUEST_ERR_MESSAGE));
       } else if (err.code === ERROR_CODE_DUPLICATE) {
-        next(new ConflictError('Пользователь с такой почтой уже зарегистрирован'));
+        next(new ConflictError(CONFLICT_ERR_MESSAGE));
       } else {
         next(err);
       }

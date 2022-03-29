@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const { WRONG_LINK_ERR_MESSAGE, WRONG_RU_MOVIE_ERR_MESSAGE, WRONG_EN_MOVIE_ERR_MESSAGE } = require('../utils/constants');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -27,7 +28,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => validator.isURL(v, { require_protocol: true }),
-      message: 'Введенное значение не является ссылкой',
+      message: WRONG_LINK_ERR_MESSAGE,
     },
   },
   trailerLink: {
@@ -35,7 +36,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => validator.isURL(v, { require_protocol: true }),
-      message: 'Введенное значение не является ссылкой',
+      message: WRONG_LINK_ERR_MESSAGE,
     },
   },
   thumbnail: {
@@ -43,7 +44,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => validator.isURL(v, { require_protocol: true }),
-      message: 'Введенное значение не является ссылкой',
+      message: WRONG_LINK_ERR_MESSAGE,
     },
   },
   owner: {
@@ -61,7 +62,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => validator.isAlpha(v, ['ru-RU']),
-      message: 'Введите название фильма на русском языке',
+      message: WRONG_RU_MOVIE_ERR_MESSAGE,
     },
   },
   nameEN: {
@@ -69,7 +70,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => validator.isAlpha(v, ['en-US']),
-      message: 'Введите название фильма на английском языке',
+      message: WRONG_EN_MOVIE_ERR_MESSAGE,
     },
   },
 });

@@ -11,6 +11,8 @@ const { errorsHandler } = require('./middlewares/errorsHandler');
 const NotFoundError = require('./errors/NotFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
+const { MONGODB_ADDRESS, PAGE_NOT_FOUND_ERR_MESSAGE } = require('./utils/constants');
+
 const app = express();
 
 const { PORT = 3000 } = process.env;
@@ -19,7 +21,7 @@ app.use(cookieParser());
 
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb');
+mongoose.connect(MONGODB_ADDRESS);
 
 app.use(requestLogger);
 
@@ -28,7 +30,7 @@ app.use(userRouter);
 app.use(MovieRouter);
 
 app.use((req, res, next) => {
-  next(new NotFoundError('Страница по указанному маршруту не найдена'));
+  next(new NotFoundError(PAGE_NOT_FOUND_ERR_MESSAGE));
 });
 
 app.use(errorLogger);

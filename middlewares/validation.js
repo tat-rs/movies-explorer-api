@@ -1,24 +1,31 @@
 const { celebrate, Joi } = require('celebrate');
 const validator = require('validator');
 const BadRequestError = require('../errors/BadRequestError');
+const {
+  WRONG_LINK_ERR_MESSAGE,
+  INCORRECT_EMAIL_ERR_MESSAGE,
+  WRONG_RU_MOVIE_ERR_MESSAGE,
+  WRONG_EN_MOVIE_ERR_MESSAGE,
+  INCORRECT_USER_NAME_ERR_MESSAGE,
+} = require('../utils/constants');
 
 const validateURL = (value) => {
   if (!validator.isURL(value, { require_protocol: true })) {
-    throw new BadRequestError('Введенное значение не является ссылкой');
+    throw new BadRequestError(WRONG_LINK_ERR_MESSAGE);
   }
   return value;
 };
 
 const validateEmail = (value) => {
   if (!validator.isEmail(value)) {
-    throw new BadRequestError('Введен некорректный email');
+    throw new BadRequestError(INCORRECT_EMAIL_ERR_MESSAGE);
   }
   return value;
 };
 
 const validateUserName = (value) => {
   if (value.length < 2 || value.length > 30) {
-    throw new BadRequestError('Имя пользователя должно содержать от 2 до 30 символов');
+    throw new BadRequestError(INCORRECT_USER_NAME_ERR_MESSAGE);
   }
   return value;
 };
@@ -63,14 +70,14 @@ const validateCreateMovie = celebrate({
         if (validator.isAlpha(value, ['ru-RU'])) {
           return value;
         }
-        return helpers.message('Введите название фильма на русском языке');
+        return helpers.message(WRONG_RU_MOVIE_ERR_MESSAGE);
       }),
     nameEN: Joi.string().required()
       .custom((value, helpers) => {
         if (validator.isAlpha(value, ['en-US'])) {
           return value;
         }
-        return helpers.message('Введите название фильма на английском языке');
+        return helpers.message(WRONG_EN_MOVIE_ERR_MESSAGE);
       }),
   }),
 });
