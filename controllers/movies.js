@@ -27,18 +27,32 @@ const getMovies = (req, res, next) => {
 
 const createMovie = (req, res, next) => {
   const {
-    // eslint-disable-next-line max-len
-    country, director, duration, year, description, image, trailerLink, nameRU, nameEN, thumbnail, movieId,
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailerLink,
+    nameRU,
+    nameEN,
+    thumbnail,
+    movieId,
   } = req.body;
 
-  // eslint-disable-next-line max-len
-  if (!country || !director || !duration || !year || !description || !image || !trailerLink || !nameRU || !nameEN || !thumbnail || !movieId) {
-    throw new NotFoundError('Не все обязательные поля указаны');
-  }
-
   return Movie.create({
-    // eslint-disable-next-line max-len
-    country, director, duration, year, description, image, trailerLink, nameRU, nameEN, thumbnail, movieId, owner: req.user._id,
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailerLink,
+    nameRU,
+    nameEN,
+    thumbnail,
+    movieId,
+    owner: req.user._id,
   })
     .then((movie) => {
       Movie.findById(movie._id)

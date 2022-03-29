@@ -27,9 +27,6 @@ const optionsOfData = {
 const createUser = (req, res, next) => {
   const { email, password, name } = req.body;
 
-  if (!email || !password || !name) {
-    throw new BadRequestError('Заполните все обязательные поля');
-  }
   // хэшируем пароль
   bcrypt.hash(password, SOLT_ROUND)
     .then((hash) => User.create({ email, password: hash, name }))
@@ -47,10 +44,6 @@ const createUser = (req, res, next) => {
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-
-  if (!email || !password) {
-    throw new BadRequestError('Не передан email или пароль');
-  }
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
@@ -89,10 +82,6 @@ const getUserMe = (req, res, next) => {
 const uptadeUserProfile = (req, res, next) => {
   const { name, email } = req.body;
 
-  if (!req.body.name || !req.body.email) {
-    throw new BadRequestError('Переданы некорректные данные');
-  }
-
   return User.findByIdAndUpdate(req.user._id, { name, email }, optionsOfData)
     .then((user) => {
       if (user) {
@@ -104,6 +93,8 @@ const uptadeUserProfile = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
         next(new BadRequestError('Переданы некорректные данные'));
+      } else if (err.code === ERROR_CODE_DUPLICATE) {
+        next(new ConflictError('Пользователь с такой почтой уже зарегистрирован'));
       } else {
         next(err);
       }
