@@ -22,6 +22,8 @@ const WRONG_ID_MOVIE_ERR_MESSAGE = 'Фильм с таким id не найде�
 
 const FORBIDDEN_ERR_MESSAGE = 'Нельзя редактировать/удалять данные другого пользователя';
 
+const UNAUTH_ERR_MESSAGE = 'Необходима авторизация';
+
 const CONFLICT_ERR_MESSAGE = 'Пользователь с такой почтой уже зарегистрирован';
 
 const WRONG_ID_USER_ERR_MESSAGE = 'Пользователь с таким id не найден';
@@ -66,4 +68,5 @@ module.exports = {
   INCORRECT_EMAIL_ERR_MESSAGE,
   WRONG_EMAIL_OR_PASSWORD_ERR_MESSAGE,
   INCORRECT_USER_NAME_ERR_MESSAGE,
+  UNAUTH_ERR_MESSAGE,
 };
