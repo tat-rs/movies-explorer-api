@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
+const cors = require('cors');
 
 require('dotenv').config();
 
@@ -20,6 +21,11 @@ const { PORT = 3000 } = process.env;
 app.use(cookieParser());
 
 app.use(express.json());
+
+app.use(cors({
+  origin: ['http://mesto22.nomoredomains.work', 'https://mesto22.nomoredomains.work', 'http://localhost:3000'],
+  credentials: true,
+}));
 
 mongoose.connect(MONGODB_ADDRESS);
 
