@@ -32,10 +32,6 @@ const SIGNOUT_SUCCESS_MESSAGE = 'Пользователь вышел из сис
 
 const WRONG_LINK_ERR_MESSAGE = 'Введенное значение не является ссылкой';
 
-const WRONG_RU_MOVIE_ERR_MESSAGE = 'Введите название фильма на русском языке';
-
-const WRONG_EN_MOVIE_ERR_MESSAGE = 'Введите название фильма на английском языке';
-
 const INCORRECT_EMAIL_ERR_MESSAGE = 'Введен некорректный email';
 
 const WRONG_EMAIL_OR_PASSWORD_ERR_MESSAGE = 'Неправильные почта или пароль';
@@ -63,8 +59,6 @@ module.exports = {
   WRONG_ID_USER_ERR_MESSAGE,
   SIGNOUT_SUCCESS_MESSAGE,
   WRONG_LINK_ERR_MESSAGE,
-  WRONG_RU_MOVIE_ERR_MESSAGE,
-  WRONG_EN_MOVIE_ERR_MESSAGE,
   INCORRECT_EMAIL_ERR_MESSAGE,
   WRONG_EMAIL_OR_PASSWORD_ERR_MESSAGE,
   INCORRECT_USER_NAME_ERR_MESSAGE,
