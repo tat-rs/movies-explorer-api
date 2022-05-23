@@ -59,6 +59,7 @@ const login = (req, res, next) => {
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
+        domains: 'movie-explorer22.nomoredomains.work',
       });
       res.send({ token });
     })
