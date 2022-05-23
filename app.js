@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use(cors({
-  origin: ['http://mesto22.nomoredomains.work', 'https://mesto22.nomoredomains.work', 'http://localhost:3000/'],
+  origin: ['http://movie-explorer22.nomoredomains.work', 'https://movie-explorer22.nomoredomains.work', 'http://localhost:3000', 'http://localhost:3000/', 'http://localhost:3001', 'http://localhost:3001/'],
   credentials: true,
 }));
 
