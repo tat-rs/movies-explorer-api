@@ -21,7 +21,7 @@ const getMovies = (req, res, next) => {
     .then((data) => {
       const usersMovie = data.filter((movie) => String(movie.owner._id) === String(req.user._id));
       if (usersMovie.length > 0) {
-        res.status(SUCCESS_CODE_OK).send({ usersMovie });
+        res.status(SUCCESS_CODE_OK).send(usersMovie);
       } else {
         throw new NotFoundError(MOVIES_NOT_FOUND_ERR_MESSAGE);
       }
@@ -62,7 +62,7 @@ const createMovie = (req, res, next) => {
       Movie.findById(movie._id)
         .populate('owner')
         .then((newMovie) => {
-          res.status(SUCCESS_CODE_CREATED).send({ newMovie });
+          res.status(SUCCESS_CODE_CREATED).send(newMovie);
         })
         .catch(next);
     })
@@ -85,7 +85,7 @@ const deleteMovieById = (req, res, next) => {
       } else if (String(movie.owner) === String(req.user._id)) {
         Movie.findByIdAndRemove(movieId)
           .then((deletedMovie) => {
-            res.status(SUCCESS_CODE_OK).send({ deletedMovie });
+            res.status(SUCCESS_CODE_OK).send(deletedMovie);
           })
           .catch((err) => {
             next(err);

@@ -4,8 +4,6 @@ const BadRequestError = require('../errors/BadRequestError');
 const {
   WRONG_LINK_ERR_MESSAGE,
   INCORRECT_EMAIL_ERR_MESSAGE,
-  WRONG_RU_MOVIE_ERR_MESSAGE,
-  WRONG_EN_MOVIE_ERR_MESSAGE,
   INCORRECT_USER_NAME_ERR_MESSAGE,
 } = require('../utils/constants');
 
@@ -65,20 +63,8 @@ const validateCreateMovie = celebrate({
     trailerLink: Joi.string().required().custom(validateURL),
     thumbnail: Joi.string().required().custom(validateURL),
     movieId: Joi.number().required(),
-    nameRU: Joi.string().required()
-      .custom((value, helpers) => {
-        if (validator.isAlpha(value, ['ru-RU'])) {
-          return value;
-        }
-        return helpers.message(WRONG_RU_MOVIE_ERR_MESSAGE);
-      }),
-    nameEN: Joi.string().required()
-      .custom((value, helpers) => {
-        if (validator.isAlpha(value, ['en-US'])) {
-          return value;
-        }
-        return helpers.message(WRONG_EN_MOVIE_ERR_MESSAGE);
-      }),
+    nameRU: Joi.string().required(),
+    nameEN: Joi.string().required(),
   }),
 });
 

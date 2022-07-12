@@ -72,7 +72,13 @@ const login = (req, res, next) => {
 };
 
 const signout = (req, res) => {
-  res.status(SUCCESS_CODE_OK).clearCookie('jwt').send({ message: SIGNOUT_SUCCESS_MESSAGE });
+  res.status(SUCCESS_CODE_OK).clearCookie('jwt', {
+    maxAge: 3600000 * 24 * 7,
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none',
+    domains: ['.movie-explorer22.nomoredomains.work', '.localhost:3001'],
+  }).send({ message: SIGNOUT_SUCCESS_MESSAGE });
 };
 
 const getUserMe = (req, res, next) => {
