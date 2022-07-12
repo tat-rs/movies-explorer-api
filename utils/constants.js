@@ -42,6 +42,21 @@ const WRONG_EMAIL_OR_PASSWORD_ERR_MESSAGE = 'Неправильные почта
 
 const INCORRECT_USER_NAME_ERR_MESSAGE = 'Имя пользователя должно содержать от 2 до 30 символов';
 
+const MAIN_URLS = [
+  'https://movie-explorer22.herokuapp.com/',
+  'https://movie-explorer22.herokuapp.com',
+  'http://localhost:3000',
+  'http://localhost:3000/',
+  'http://localhost:3001',
+  'http://localhost:3001/',
+];
+
+const DOMAINS = [
+  '.movie-explorer22.herokuapp.com',
+  '.localhost:3000',
+  '.localhost:3001',
+];
+
 module.exports = {
   ERROR_CODE_NOCORRECT,
   ERROR_UNAUTHORIZATED,
@@ -69,4 +84,6 @@ module.exports = {
   WRONG_EMAIL_OR_PASSWORD_ERR_MESSAGE,
   INCORRECT_USER_NAME_ERR_MESSAGE,
   UNAUTH_ERR_MESSAGE,
+  MAIN_URLS,
+  DOMAINS,
 };

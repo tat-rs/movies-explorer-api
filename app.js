@@ -12,22 +12,22 @@ const { errorsHandler } = require('./middlewares/errorsHandler');
 const NotFoundError = require('./errors/NotFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { MONGODB_ADDRESS, PAGE_NOT_FOUND_ERR_MESSAGE } = require('./utils/constants');
+const { MONGODB_ADDRESS, PAGE_NOT_FOUND_ERR_MESSAGE, MAIN_URLS } = require('./utils/constants');
 
 const app = express();
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, MONGODB_URL } = process.env;
 
 app.use(cookieParser());
 
 app.use(express.json());
 
 app.use(cors({
-  origin: ['http://mesto22.nomoredomains.work', 'https://mesto22.nomoredomains.work', 'http://localhost:3000/'],
+  origin: MAIN_URLS,
   credentials: true,
 }));
 
-mongoose.connect(MONGODB_ADDRESS);
+mongoose.connect(MONGODB_URL || MONGODB_ADDRESS);
 
 app.use(requestLogger);
 

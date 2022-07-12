@@ -12,6 +12,7 @@ const {
   CONFLICT_ERR_MESSAGE,
   WRONG_ID_USER_ERR_MESSAGE,
   SIGNOUT_SUCCESS_MESSAGE,
+  DOMAINS,
 } = require('../utils/constants');
 
 const {
@@ -59,6 +60,9 @@ const login = (req, res, next) => {
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        domains: DOMAINS,
       });
       res.send({ token });
     })
