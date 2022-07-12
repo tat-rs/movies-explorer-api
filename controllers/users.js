@@ -12,6 +12,7 @@ const {
   CONFLICT_ERR_MESSAGE,
   WRONG_ID_USER_ERR_MESSAGE,
   SIGNOUT_SUCCESS_MESSAGE,
+  DOMAINS,
 } = require('../utils/constants');
 
 const {
@@ -61,7 +62,7 @@ const login = (req, res, next) => {
         httpOnly: true,
         secure: true,
         sameSite: 'none',
-        domains: ['.movie-explorer22.nomoredomains.work', '.localhost:3001'],
+        domains: DOMAINS,
       });
       res.send({ token });
     })
