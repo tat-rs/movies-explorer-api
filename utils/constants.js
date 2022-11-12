@@ -41,6 +41,8 @@ const INCORRECT_USER_NAME_ERR_MESSAGE = 'Имя пользователя дол�
 const MAIN_URLS = [
   'https://movie-explorer22.herokuapp.com/',
   'https://movie-explorer22.herokuapp.com',
+  'https://movies-explorer-frontend-teal.vercel.app/',
+  'https://movies-explorer-frontend-teal.vercel.app',
   'http://localhost:3000',
   'http://localhost:3000/',
   'http://localhost:3001',
@@ -49,6 +51,7 @@ const MAIN_URLS = [
 
 const DOMAINS = [
   '.movie-explorer22.herokuapp.com',
+  '.movies-explorer-frontend-teal.vercel.app',
   '.localhost:3000',
   '.localhost:3001',
 ];
