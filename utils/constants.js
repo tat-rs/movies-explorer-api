@@ -39,6 +39,8 @@ const WRONG_EMAIL_OR_PASSWORD_ERR_MESSAGE = 'Неправильные почта
 const INCORRECT_USER_NAME_ERR_MESSAGE = 'Имя пользователя должно содержать от 2 до 30 символов';
 
 const MAIN_URLS = [
+  'https://movies-explorer-frontend-teal.vercel.app/',
+  'https://movies-explorer-frontend-teal.vercel.app',
   'https://movies-explorer-frontend-tat-rs.vercel.app/',
   'https://movies-explorer-frontend-tat-rs.vercel.app',
   'http://localhost:3000',
@@ -48,6 +50,7 @@ const MAIN_URLS = [
 ];
 
 const DOMAINS = [
+  '.movies-explorer-frontend-teal.vercel.app',
   '.movies-explorer-frontend-tat-rs.vercel.app',
   '.localhost:3000',
   '.localhost:3001',
