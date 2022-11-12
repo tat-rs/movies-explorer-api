@@ -35,4 +35,4 @@ __4. Запустить проект с hot-reload__
 
 ## Ссылка на сайт
 
-Ссылка на сервер: <a href="https://movies-explorer-api-six.vercel.app/" target="_blank" rel="noopener">https://movies-explorer-api-six.vercel.app/</a>
+Ссылка на сервер: <a href="https://movies-explorer-api-six.vercel.app" target="_blank" rel="noopener">https://movies-explorer-api-six.vercel.app/</a>
