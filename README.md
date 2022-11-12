@@ -35,4 +35,4 @@ __4. Запустить проект с hot-reload__
 
 ## Ссылка на сайт
 
-Ссылка на сервер: <a href="https://movie-explorer-api22.herokuapp.com" target="_blank" rel="noopener">https://movie-explorer-api22.herokuapp.com</a>
+Ссылка на сервер: <a href="https://movies-explorer-api-six.vercel.app/" target="_blank" rel="noopener">https://movies-explorer-api-six.vercel.app/</a>
